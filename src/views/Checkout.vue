@@ -1,0 +1,94 @@
+<template>
+  <section class="grid md:grid-cols-2 gap-8">
+    <form class="card space-y-4" @submit.prevent="submit">
+      <h2 class="h2">Checkout</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="block text-sm muted mb-1">Full name</label><input v-model="customer.name" class="input" required /></div>
+        <div><label class="block text-sm muted mb-1">Email</label><input v-model="customer.email" type="email" class="input" required /></div>
+        <div><label class="block text-sm muted mb-1">Phone</label><input v-model="customer.phone" class="input" required /></div>
+      </div>
+      <div>
+        <label class="block text-sm muted mb-1">Delivery Address</label>
+        <textarea v-model="order.deliveryAddress" class="input" rows="3" placeholder="Enter your delivery address" required></textarea>
+      </div>
+      <div class="flex gap-3">
+        <button class="btn" type="submit" :disabled="loading">{{ loading ? 'Placing Order...' : 'Place Order' }}</button>
+        <router-link class="btn-outline" to="/cart">Back to Cart</router-link>
+      </div>
+    </form>
+
+    <div class="card space-y-2 h-fit">
+      <h3 class="font-semibold">Order Summary</h3>
+      <div class="divide-y">
+        <div v-for="l in cart.lines" :key="l.item.id" class="flex justify-between py-2 text-sm">
+          <span>{{ l.item.name }} × {{ l.quantity }}</span>
+          <span>{{ currency(l.price * l.quantity) }}</span>
+        </div>
+      </div>
+      <p class="text-right font-semibold">Total: {{ currency(cart.totalPrice) }}</p>
+    </div>
+  </section>
+
+  <!-- Success Modal -->
+  <div v-if="showSuccess" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg max-w-md mx-4">
+      <div class="text-center">
+        <div class="text-green-500 text-5xl mb-4">✓</div>
+        <h3 class="text-xl font-semibold mb-2">Order Placed Successfully!</h3>
+        <p class="text-gray-600 mb-4">Your order has been placed and you will receive a confirmation email shortly.</p>
+        <button @click="closeModal" class="btn">View My Orders</button>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup>
+import { reactive, ref } from 'vue'
+import { Orders, Customers } from '../services/api'
+import { useCartStore } from '../stores/cart'
+import { useRouter } from 'vue-router'
+
+const cart = useCartStore()
+const router = useRouter()
+const loading = ref(false)
+const showSuccess = ref(false)
+
+const customer = reactive({ name: '', email: '', phone: '' })
+const order = reactive({ deliveryAddress: '', status: 'PENDING' })
+const currency = (n) => new Intl.NumberFormat(undefined, { style:'currency', currency:'ZAR' }).format(n)
+
+async function submit() {
+  try {
+    loading.value = true
+    
+    // Create customer
+    const createdCustomer = await Customers.create(customer)
+    
+    // Create order with items
+    const orderDto = {
+      customer: { id: createdCustomer.id },
+      status: order.status,
+      items: cart.lines.map(l => ({
+        item: { id: l.item.id },
+        quantity: l.quantity
+      }))
+    }
+    
+    await Orders.create(orderDto)
+    
+    // Show success modal
+    showSuccess.value = true
+    cart.clear()
+    
+  } catch (error) {
+    console.error('Order placement failed:', error)
+    alert('Failed to place order. Please try again.')
+  } finally {
+    loading.value = false
+  }
+}
+
+function closeModal() {
+  showSuccess.value = false
+  router.push('/orders')
+}
+</script>

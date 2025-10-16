@@ -1,0 +1,9 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+@layer components {
+  .btn { @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl shadow-sm bg-brand text-white hover:bg-brand-600 transition; }
+  .btn-outline { @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50; }
+  .card { @apply bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-4; }
+  .h1 { @apply text-3xl font-bold tracking-tight; } .h2 { @apply text-2xl font-bold tracking-tight; }
+  .muted { @apply text-slate-500; } .input { @apply w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand; }
+  .table { @apply w-full text-left; } .th,.td { @apply px-3 py-2 border-b border-slate-100; }
+}
