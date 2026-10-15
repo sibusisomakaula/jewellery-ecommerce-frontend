@@ -1,63 +1,51 @@
-# Jewellery E-commerce Backend
+# Jewellery E-commerce Frontend
 
-The REST API for a jewellery e-commerce system, built with Java, Spring Boot, Spring Data JPA and MySQL. The matching UI is in the [frontend repo](https://github.com/sibusisomakaula/jewellery-ecommerce-frontend).
+The web frontend for a jewellery e-commerce system, built with Vue, Vite and Tailwind CSS. It talks to the [backend API](https://github.com/sibusisomakaula/jewellery-ecommerce-backend).
 
 ## Tech stack
 
-- Java
-- Spring Boot (Maven)
-- Spring Data JPA / Hibernate
-- Spring Security
-- MySQL
+- Vue
+- Vite
+- Tailwind CSS / PostCSS
 
 ## Prerequisites
 
-- JDK (the version set in `pom.xml`)
-- [Maven](https://maven.apache.org/) (or use an IDE such as IntelliJ)
-- MySQL running on `localhost:3306`
-
-## Database setup
-
-The app connects to a database called `jewellerydb`, which is created automatically if it doesn't exist. By default it uses:
-
-- Username: `root`
-- Password: `root`
-
-If your MySQL credentials are different, edit `src/main/resources/application.properties`, or set the environment variables below (if your properties file is configured to read them):
-
-```
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
+- [Node.js](https://nodejs.org/) (LTS version recommended)
+- The backend running locally (see the backend repo)
 
 ## Getting started
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/sibusisomakaula/jewellery-ecommerce-backend.git
-cd jewellery-ecommerce-backend
+git clone https://github.com/sibusisomakaula/jewellery-ecommerce-frontend.git
+cd jewellery-ecommerce-frontend
 
-# 2. Run the application
-mvn spring-boot:run
+# 2. Install dependencies
+npm install
+
+# 3. Start the development server
+npm run dev
 ```
 
-The API starts on `http://localhost:8080` by default.
+Vite will print a local address (usually `http://localhost:5173`). Open it in your browser.
 
-## Notes
+## Build for production
 
-- Hibernate is set to `ddl-auto=update`, so tables are created and updated automatically.
-- The `uploads/` folder (for uploaded images) and `data/` folder are not stored in Git. Create `uploads/` in the project root if the app needs it.
-- SQL logging is switched on for development. Turn it off in `application.properties` for production.
+```bash
+npm run build
+```
+
+The output goes into the `dist` folder.
 
 ## Project structure
 
 ```
-src/main/java/za/co/jewellerysystem/
-  config/        Application configuration
-  controller/    REST controllers
-  domain/        Entity classes
-  factory/       Object factories
-  repository/    Data access layer
-  security/      Security configuration
-  service/       Business logic
+src/            Application source code
+index.html      Entry HTML file
+vite.config.js  Vite configuration
+tailwind.config.js  Tailwind configuration
 ```
+
+## Backend connection
+
+Make sure the backend is running before using the app. If the API address in the code differs from where your backend runs, update it in the project's API configuration.
