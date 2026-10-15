@@ -5,17 +5,17 @@
       <table class="table">
         <thead class="bg-slate-50"><tr><th class="th">ID</th><th class="th">Status</th><th class="th">Total</th><th class="th">Customer</th><th class="th">Actions</th></tr></thead>
         <tbody>
-          <tr v-for="o in orders" :key="o.id">
-            <td class="td">{{ o.id }}</td>
-            <td class="td">{{ o.status }}</td>
-            <td class="td">{{ currency(o.totalPrice) }}</td>
-            <td class="td">{{ o.customer?.fullName || o.customerId }}</td>
-            <td class="td">
-              <select v-model="o.status" class="input w-40" @change="update(o)">
-                <option>NEW</option><option>PAID</option><option>READY</option><option>COLLECTED</option><option>CANCELLED</option>
-              </select>
-            </td>
-          </tr>
+        <tr v-for="o in orders" :key="o.id">
+          <td class="td">{{ o.id }}</td>
+          <td class="td">{{ o.status }}</td>
+          <td class="td">{{ currency(o.totalPrice) }}</td>
+          <td class="td">{{ o.customer?.fullName || o.customerId }}</td>
+          <td class="td">
+            <select v-model="o.status" class="input w-40" @change="update(o)">
+              <option>NEW</option><option>PAID</option><option>READY</option><option>COLLECTED</option><option>CANCELLED</option>
+            </select>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>

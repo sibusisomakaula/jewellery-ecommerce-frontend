@@ -48,7 +48,7 @@
             </div>
           </td>
           <td class="td">{{ p.name }}</td>
-          <td class="td">{{ p.price }}</td>
+          <td class="td">{{ currency(p.price) }}</td>
           <td class="td">{{ p.quantity }}</td>
           <td class="td">{{ p.category?.name || p.categoryId }}</td>
           <td class="td">
@@ -65,45 +65,44 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { Items, Categories } from '../../services/api'
+import {ref, reactive, onMounted} from 'vue'
+import {Items, Categories} from '../../services/api'
 
-// Product list and categories
 const items = ref([])
 const categories = ref([])
 
-// Form state
-const form = reactive({ id:'', name:'', description:'', price:0, quantity:0, categoryId:'', imageUrl:'' })
+const form = reactive({id: '', name: '', description: '', price: 0, quantity: 0, categoryId: '', imageUrl: ''})
 const file = ref(null)
 const filePreview = ref('')
 
-// Load products and categories
-const load = async () => { items.value = await Items.list({size:200}) }
-const loadCats = async () => { categories.value = await Categories.list() }
+const load = async () => {
+  items.value = await Items.list({size: 200})
+}
+const loadCats = async () => {
+  categories.value = await Categories.list()
+}
 
-// Reset form
 const reset = () => {
-  Object.assign(form, { id:'', name:'', description:'', price:0, quantity:0, categoryId:'', imageUrl:'' })
+  Object.assign(form, {id: '', name: '', description: '', price: 0, quantity: 0, categoryId: '', imageUrl: ''})
   file.value = null
   filePreview.value = ''
 }
 
-// Handle file selection
 function handleFile(e) {
   file.value = e.target.files[0]
   if (file.value) filePreview.value = URL.createObjectURL(file.value)
 }
 
-// Edit product
 const edit = (p) => {
-  Object.assign(form, p, { categoryId: p.categoryId || p.category?.id })
+  Object.assign(form, p, {categoryId: p.categoryId || p.category?.id})
   filePreview.value = p.imageUrl || ''
 }
 
-// Delete product
-const del = async (p) => { await Items.remove(p.id); await load() }
+const del = async (p) => {
+  await Items.remove(p.id);
+  await load()
+}
 
-// Save or update product
 const save = async () => {
   const formData = new FormData()
   formData.append('name', form.name)
@@ -113,16 +112,16 @@ const save = async () => {
   formData.append('categoryId', form.categoryId)
   if (file.value) formData.append('image', file.value)
 
-  if (form.id) {
-    await Items.update(form.id, formData)
-  } else {
-    await Items.create(formData)
-  }
+  if (form.id) await Items.update(form.id, formData)
+  else await Items.create(formData)
 
   await load()
   reset()
 }
 
-// Load data on mount
-onMounted(async () => { await Promise.all([load(), loadCats()]) })
+const currency = n => new Intl.NumberFormat('en-ZA', {style: 'currency', currency: 'ZAR'}).format(n)
+
+onMounted(async () => {
+  await Promise.all([load(), loadCats()])
+})
 </script>

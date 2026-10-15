@@ -13,8 +13,9 @@
         <nav class="flex items-center gap-4 text-sm font-medium text-brand-dark">
           <!-- User-only links -->
           <template v-if="auth.user?.role === 'USER'">
+            <router-link to="/" class="hover:text-brand-gold transition">Home</router-link>
             <router-link to="/products" class="hover:text-brand-gold transition">Products</router-link>
-            <router-link to="/cart" class="hover:text-brand-gold transition">Cart ({{ cartCount }})</router-link>
+            <router-link to="/cart" class="hover:text-brand">Cart ({{ cartCount }})</router-link>
             <router-link to="/orders" class="hover:text-brand-gold transition">My Orders</router-link>
           </template>
 
@@ -27,7 +28,11 @@
 
           <!-- Public links -->
           <template v-if="!auth.isAuthed">
+            <router-link to="/" class="hover:text-brand-gold transition">Home</router-link>
             <router-link to="/products" class="hover:text-brand-gold transition">Products</router-link>
+            <router-link to="/cart" class="hover:text-brand">Cart ({{ cartCount }})</router-link>
+            <router-link to="/orders" class="hover:text-brand-gold transition">My Orders</router-link>
+
           </template>
         </nav>
 

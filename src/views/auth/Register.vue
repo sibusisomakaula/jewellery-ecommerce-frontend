@@ -6,11 +6,6 @@
       <input v-model="email" type="email" placeholder="Email" class="input-field" required />
       <input v-model="password" type="password" placeholder="Password" class="input-field" required />
 
-      <select v-model="role" class="input-field">
-        <option value="USER">User</option>
-        <option value="ADMIN">Admin</option>
-      </select>
-
       <button type="submit" class="btn-primary w-full">Create Account</button>
       <router-link to="/login" class="block text-center text-sm text-brand-gold hover:underline">
         Already have an account?
@@ -23,14 +18,13 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useRouter} from 'vue-router'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const fullName = ref('')
 const email = ref('')
 const password = ref('')
-const role = ref('USER')
 const msg = ref('')
 const err = ref('')
 const router = useRouter()
@@ -39,11 +33,11 @@ async function submit() {
   err.value = ''
   msg.value = ''
   try {
+    // Send only name, email, and password. Backend should assign USER role automatically
     await axios.post('http://localhost:8080/api/auth/register', {
       fullName: fullName.value,
       email: email.value,
-      password: password.value,
-      role: role.value
+      password: password.value
     })
     msg.value = 'Account created. You can now sign in.'
     setTimeout(() => router.push('/login'), 500)

@@ -8,12 +8,12 @@
       <table class="table">
         <thead class="bg-slate-50"><tr><th class="th">Item</th><th class="th">Qty</th><th class="th">Price</th><th class="th">Line</th></tr></thead>
         <tbody>
-          <tr v-for="i in order.items || []" :key="i.jewelleryItemId">
-            <td class="td">{{ i.itemName || i.jewelleryItem?.name || i.jewelleryItemId }}</td>
-            <td class="td">{{ i.quantity }}</td>
-            <td class="td">{{ currency(i.price) }}</td>
-            <td class="td">{{ currency(i.price * i.quantity) }}</td>
-          </tr>
+        <tr v-for="i in order.items || []" :key="i.jewelleryItemId">
+          <td class="td">{{ i.itemName || i.jewelleryItem?.name || i.jewelleryItemId }}</td>
+          <td class="td">{{ i.quantity }}</td>
+          <td class="td">{{ currency(i.price) }}</td>
+          <td class="td">{{ currency(i.price * i.quantity) }}</td>
+        </tr>
         </tbody>
       </table>
     </div>

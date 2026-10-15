@@ -17,18 +17,20 @@
   </section>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
-import { Items } from '../services/api'
-import { useCartStore } from '../stores/cart'
-import { useRoute } from 'vue-router'
+import {onMounted, ref} from 'vue'
+import {Items} from '../services/api'
+import {useCartStore} from '../stores/cart'
+import {useRoute} from 'vue-router'
 
 const route = useRoute()
 const id = route.params.id
 const item = ref(null)
 const qty = ref(1)
 const cart = useCartStore()
-const currency = (n) => new Intl.NumberFormat(undefined, { style:'currency', currency:'ZAR' }).format(n)
+const currency = (n) => new Intl.NumberFormat(undefined, {style: 'currency', currency: 'ZAR'}).format(n)
 
 const add = () => cart.add(item.value, qty.value)
-onMounted(async () => { item.value = await Items.get(id) })
+onMounted(async () => {
+  item.value = await Items.get(id)
+})
 </script>
